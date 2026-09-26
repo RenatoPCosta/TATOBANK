@@ -1,0 +1,371 @@
+000100* N TATOBANK                                                      00010001
+000200*----------------------------------------------------------------*00020001
+000300*  RELATORIO AGENCIA: INFORMATIVO SOBRE AGENCIAS POR REGIAO      *00030001
+000400*----------------------------------------------------------------*00040001
+000500*    CRIADOO POR: RENATO COSTA                                   *00050001
+000600*    DATA       : 24/08/2026                                     *00060001
+000700*    TAG        : TATOBANK                                       *00070001
+000800*    OBJETIVO   : RELATORIO REFERENTE AGENCIAS                   *00080001
+000900*                 DE VSAM KSDS PARA PDS                          *00090001
+001000*----------------------------------------------------------------*00100001
+001100 IDENTIFICATION DIVISION.                                         00110001
+001200 PROGRAM-ID CBLAGR01.                                             00120001
+001300 ENVIRONMENT DIVISION.                                            00130001
+001400 CONFIGURATION SECTION.                                           00140001
+001500 SPECIAL-NAMES.                                                   00150001
+001600      DECIMAL-POINT IS COMMA.                                     00160001
+001700 INPUT-OUTPUT SECTION.                                            00170001
+001800 FILE-CONTROL.                                                    00180001
+001900      SELECT ENTRADA ASSIGN TO ENTRADA                            00190001
+002000             ORGANIZATION IS INDEXED                              00200001
+002100             ACCESS MODE IS SEQUENTIAL                            00210001
+002200             RECORD KEY IS COPYAG01-KEY-STRUCT-FD-E               00220001
+002300             FILE STATUS IS ST-ENTRADA.                           00230001
+002900                                                                  00290001
+003000     SELECT HEADERT ASSIGN TO HEADERT                             00300001
+003100            ORGANIZATION IS SEQUENTIAL                            00310001
+003200            ACCESS MODE IS SEQUENTIAL                             00320001
+003300            FILE STATUS IS ST-HEADERT.                            00330001
+003400                                                                  00340001
+003500     SELECT AGATIV ASSIGN TO AGATIV                               00350001
+003600            ORGANIZATION IS SEQUENTIAL                            00360001
+003700            ACCESS MODE IS SEQUENTIAL                             00370001
+003800            FILE STATUS IS ST-AGATIV.                             00380001
+004400                                                                  00440001
+004500     SELECT AGBLOC ASSIGN TO AGBLOC                               00450001
+004600            ORGANIZATION IS SEQUENTIAL                            00460001
+004700            ACCESS MODE IS SEQUENTIAL                             00470001
+004701            FILE STATUS IS ST-AGBLOC.                             00470101
+004702                                                                  00470220
+004703     SELECT AGINAT ASSIGN TO AGINAT                               00470320
+004704            ORGANIZATION IS SEQUENTIAL                            00470420
+004705            ACCESS MODE IS SEQUENTIAL                             00470520
+004706            FILE STATUS IS ST-AGINAT.                             00470620
+004707                                                                  00470720
+004708     SELECT FOOTERT ASSIGN TO FOOTERT                             00470820
+004709            ORGANIZATION IS SEQUENTIAL                            00470920
+004710            ACCESS MODE IS SEQUENTIAL                             00471020
+004711            FILE STATUS IS ST-FOOTERT.                            00471120
+004712 DATA DIVISION.                                                   00471220
+004713 FILE SECTION.                                                    00471320
+004714 FD ENTRADA.                                                      00471420
+004715     COPY COPYAG01 REPLACING ==(TAG)== BY ==FD-E==.               00471520
+004716                                                                  00471620
+004717 FD HEADERT                                                       00471720
+004718     RECORDING MODE IS F                                          00471820
+004719     BLOCK CONTAINS 0 RECORDS                                     00471920
+004720     LABEL RECORDS ARE STANDARD.                                  00472020
+004721 01 FD-HEADER         PIC X(200) VALUE SPACES.                    00472120
+004730                                                                  00473001
+004740 FD AGATIV                                                        00474001
+004750     RECORDING MODE IS F                                          00475001
+004760     BLOCK CONTAINS 0 RECORDS                                     00476001
+004761     LABEL RECORDS ARE STANDARD.                                  00476101
+004762 01 FD-AGATIV          PIC X(200) VALUE SPACES.                   00476201
+004793                                                                  00479301
+004800 FD AGBLOC                                                        00480001
+004900     RECORDING MODE IS F                                          00490001
+005000     BLOCK CONTAINS 0 RECORDS                                     00500001
+005001     LABEL RECORDS ARE STANDARD.                                  00500101
+005002 01 FD-AGBLOC          PIC X(200) VALUE SPACES.                   00500201
+005003                                                                  00500320
+005004 FD AGINAT                                                        00500420
+005005     RECORDING MODE IS F                                          00500520
+005006     BLOCK CONTAINS 0 RECORDS                                     00500620
+005007     LABEL RECORDS ARE STANDARD.                                  00500720
+005008 01 FD-AGINAT          PIC X(200) VALUE SPACES.                   00500820
+005009                                                                  00500920
+005010 FD FOOTERT                                                       00501020
+005011     RECORDING MODE IS F                                          00501120
+005012     BLOCK CONTAINS 0 RECORDS                                     00501220
+005013     LABEL RECORDS ARE STANDARD.                                  00501320
+005014 01 FD-FOOTERT         PIC X(200) VALUE SPACES.                   00501420
+005015                                                                  00501520
+005016 WORKING-STORAGE SECTION.                                         00501620
+005017 77 IO-STATUS              PIC X(001) VALUE 'N'.                  00501720
+005018 77 ST-ENTRADA             PIC X(02) VALUE '00'.                  00501820
+005019 77 ST-HEADERT             PIC X(02) VALUE '00'.                  00501920
+005020 77 ST-AGATIV              PIC X(02) VALUE '00'.                  00502020
+005021 77 ST-AGINAT              PIC X(02) VALUE '00'.                  00502120
+005022 77 ST-AGBLOC              PIC X(02) VALUE '00'.                  00502220
+005023 77 ST-FOOTERT             PIC X(02) VALUE '00'.                  00502320
+005024                                                                  00502420
+005025 01 WS-DATA-IN             VALUE SPACES.                          00502520
+005026   05 WS-ANO-IN            PIC X(04).                             00502620
+005027   05 WS-MES-IN            PIC X(02).                             00502720
+005028   05 WS-DIA-IN            PIC X(02).                             00502820
+005029 01 WS-DATA-RELAT.                                                00502920
+005030   05 WS-DIA-RELAT         PIC X(02) VALUE SPACES.                00503020
+011442   05 FILLER               PIC X(01) VALUE "/".                   01144220
+011443   05 WS-MES-RELAT         PIC X(02) VALUE SPACES.                01144320
+011444   05 FILLER               PIC X(01) VALUE "/".                   01144420
+011445   05 WS-ANO-RELAT         PIC X(04) VALUE SPACES.                01144520
+011446                                                                  01144620
+011447 01 WS-HORARIO-IN          VALUE ZEROES.                          01144720
+011448   05 WS-HORA-IN           PIC 9(02).                             01144820
+011449   05 WS-MINUTO-IN         PIC 9(02).                             01144920
+011450   05 WS-SEGUNDO-IN        PIC 9(02).                             01145020
+011451   05 WS-CENTESIMO-IN      PIC 9(02).                             01145120
+011452 01 WS-HORARIO-RELAT.                                             01145220
+011453   05 WS-HORA-RELAT        PIC 9(02) VALUE ZEROES.                01145320
+011454   05 FILLER               PIC X(01) VALUE ":".                   01145420
+011455   05 WS-MINUTO-RELAT      PIC 9(02) VALUE ZEROES.                01145520
+011456   05 FILLER               PIC X(01) VALUE ":".                   01145620
+011457   05 WS-SEGUNDO-RELAT     PIC 9(02) VALUE ZEROES.                01145720
+011458   05 FILLER               PIC X(01) VALUE ":".                   01145820
+011459   05 WS-CENTESIMO-RELAT   PIC 9(02) VALUE ZEROES.                01145920
+011460                                                                  01146020
+011461 77 WS-INDICE-ATIVAS       PIC 9(05) VALUE ZEROES.                01146120
+011462 77 WS-INDICE-INATIVAS     PIC 9(05) VALUE ZEROES.                01146220
+011463 77 WS-INDICE-BLOQUEADAS   PIC 9(05) VALUE ZEROES.                01146320
+011464                                                                  01146420
+011465*MAPA DE REGISTROS DE SAIDA PARA RELATORIO DE AGENCIAS            01146520
+011466 01 WS-AGENCIA-OUT.                                               01146620
+011467  03 WS-BODY-REGISTRO.                                            01146720
+011468   05 WS-AGENCIA.                                                 01146820
+011469     10 WS-AGENCIA-BASE      PIC X(04).                           01146920
+011470     10 FILLER               PIC X(01) VALUE "-".                 01147020
+011471     10 WS-AGENCIA-DV        PIC X(01).                           01147120
+011472   05 FILLER                 PIC X(03) vALUE " * ".               01147220
+011473   05 WS-CNPJ.                                                    01147320
+011474     10 WS-CNPJ-RE-FISCAL    PIC X(02).                           01147420
+011475     10 FILLER               PIC X(01) VALUE ".".                 01147520
+011476     10 WS-CNPJ-ORDEM        PIC X(03).                           01147620
+011477     10 FILLER               PIC X(01) VALUE ".".                 01147720
+011478     10 WS-CNPJ-CONTROLE     PIC X(03).                           01147820
+011479     10 FILLER               PIC X(01) VALUE "/".                 01147920
+011480     10 WS-CNPJ-FILIAL       PIC X(04).                           01148020
+011481     10 FILLER               PIC X(01) VALUE "-".                 01148120
+011482     10 WS-CNPJ-DV           PIC X(02).                           01148220
+011483   05 FILLER                 PIC X(03) vALUE " * ".               01148320
+011484   05 WS-NOME-AGENCIA        PIC X(25).                           01148420
+011485   05 FILLER                 PIC X(03) VALUE " * ".               01148520
+011486   05 WS-TIPO-AG             PIC X(09).                           01148620
+011487     88 WS-AG-VAREJO         VALUE 'VAREJO   '.                   01148720
+011488     88 WS-AG-DIGITAL        VALUE 'DIGITSAL '.                   01148820
+011489     88 WS-AG-CORPORATE      VALUE 'CORPORATE'.                   01148920
+011490   05 FILLER                 PIC X(03) VALUE " * ".               01149020
+011491   05 WS-STATUS-AGENCIA      PIC X(09).                           01149120
+011492   05 FILLER                 PIC X(03) VALUE " * ".               01149220
+011493   05 WS-DATA-ABERTURA.                                           01149320
+011494     10 WS-DIA-OUT-AB        PIC X(02) VALUE SPACES.              01149420
+011495     10 FILLER               PIC X(01) VALUE "/".                 01149520
+011496     10 WS-MES-OUT-AB        PIC X(02) VALUE SPACES.              01149620
+011497     10 FILLER               PIC X(01) VALUE "/".                 01149720
+011498     10 WS-ANO-OUT-AB        PIC X(04) VALUE SPACES.              01149820
+011499   05 FILLER                 PIC X(03) VALUE SPACES.              01149920
+011500   05 FILLER                 PIC X(03) VALUE " * ".               01150020
+011501   05 WS-STATUS-ENCERRAMENTO.                                     01150120
+011502     10 WS-DIA-OUT-ENC       PIC X(02) VALUE SPACES.              01150220
+011503     10 FILLER               PIC X(01) VALUE "/".                 01150320
+011504     10 WS-MES-OUT-ENC       PIC X(02) VALUE SPACES.              01150420
+011505     10 FILLER               PIC X(01) VALUE "/".                 01150520
+011506     10 WS-ANO-OUT-ENC       PIC X(04) VALUE SPACES.              01150620
+011507   05 FILLER                 PIC X(07) VALUE SPACES.              01150720
+011508   05 FILLER                 PIC X(03) VALUE " * ".               01150820
+011509   05 WS-EMAIL               PIC X(40).                           01150920
+011510   05 FILLER                 PIC X(03) VALUE " * ".               01151020
+011511   05 WS-TELEFONE.                                                01151120
+011512     10 FILLER               PIC X(01) VALUE "(".                 01151220
+011513     10 WS-TELEFONE-PREFIXO  PIC X(02).                           01151320
+011514     10 FILLER               PIC X(01) VALUE ")".                 01151420
+011515     10 WS-TELEFONE-SUFIXO-BRUTO.                                 01151520
+011516       15 WS-TELEFONE-SUFIXO1  PIC X(04).                         01151620
+011517       15 FILLER               PIC X(01) VALUE "-".               01151720
+011518       15 WS-TELEFONE-SUFIXO2  PIC X(04).                         01151820
+011519   05 FILLER                 PIC X(03) VALUE " * ".               01151920
+011520   05 WS-CELULAR.                                                 01152020
+011521     10 FILLER                 PIC X(01) VALUE "(".               01152120
+011522     10 WS-CELULAR-PREFIXO     PIC X(02).                         01152220
+011523     10 FILLER                 PIC X(01) VALUE ")".               01152320
+011524     10 WS-CELULAR-SUFIXO-BRUTO.                                  01152420
+011525       15 WS-CELULAR-SUFIXO1   PIC X(05).                         01152520
+011526       15 FILLER               PIC X(01) VALUE "-".               01152620
+011527       15 WS-CELULAR-SUFIXO2   PIC X(04).                         01152720
+011528   05 FILLER                   PIC X(12) VALUE SPACES.            01152820
+011529                                                                  01152920
+011530 PROCEDURE DIVISION.                                              01153020
+011531 0001-MAIN.                                                       01153120
+011532     PERFORM 0010-ABRIRARQ.                                       01153220
+011533     PERFORM 0020-PROCESSA.                                       01153320
+011534                                                                  01153420
+011535     CLOSE ENTRADA                                                01153520
+011536           HEADERT                                                01153620
+011537           AGATIV                                                 01153720
+011538           AGBLOC                                                 01153820
+011539           AGINAT                                                 01153920
+011540           FOOTERT.                                               01154020
+011541     GOBACK.                                                      01154120
+011542                                                                  01154220
+011543 0010-ABRIRARQ.                                                   01154320
+011544     OPEN INPUT ENTRADA.                                          01154420
+011545     OPEN OUTPUT HEADERT                                          01154520
+011546                 AGATIV                                           01154620
+011547                 AGBLOC                                           01154720
+011548                 AGINAT                                           01154820
+011549                 FOOTERT.                                         01154920
+011550                                                                  01155020
+011551     IF ST-ENTRADA NOT = '00' THEN                                01155120
+011552     DISPLAY 'ERRO OPEN ENTRADA - FS=' ST-ENTRADA                 01155220
+011553             MOVE 'S' TO IO-STATUS                                01155320
+011554     END-IF.                                                      01155420
+011555                                                                  01155520
+011556     IF ST-HEADERT NOT = '00' THEN                                01155620
+011557         DISPLAY 'ERRO OPEN HEADERT - FS=' ST-HEADERT             01155720
+011558         MOVE 'S' TO IO-STATUS                                    01155820
+011559     END-IF.                                                      01155920
+011560                                                                  01156020
+011561     IF ST-AGATIV NOT = '00' THEN                                 01156120
+011562         DISPLAY 'ERRO OPEN AGATIV - FS=' ST-AGATIV               01156220
+011563         MOVE 'S' TO IO-STATUS                                    01156320
+011564     END-IF.                                                      01156420
+011565                                                                  01156520
+011566     IF ST-AGBLOC NOT = '00' THEN                                 01156620
+011567         DISPLAY 'ERRO OPEN AGBLOC - FS=' ST-AGBLOC               01156720
+011568         MOVE 'S' TO IO-STATUS                                    01156820
+011569     END-IF.                                                      01156920
+011570                                                                  01157020
+011571     IF ST-AGINAT NOT = '00' THEN                                 01157120
+011572         DISPLAY 'ERRO OPEN AGINAT - FS=' ST-AGINAT               01157220
+011573         MOVE 'S' TO IO-STATUS                                    01157320
+011574     END-IF.                                                      01157420
+011575                                                                  01157520
+011576     IF ST-FOOTERT NOT = '00' THEN                                01157620
+011577         DISPLAY 'ERRO OPEN FOOTERT - FS=' ST-FOOTERT             01157720
+011578         MOVE 'S' TO IO-STATUS                                    01157820
+011579     END-IF.                                                      01157920
+011580                                                                  01158020
+011581 0020-PROCESSA.                                                   01158120
+011582     PERFORM 0030-CRIA-HEADER.                                    01158220
+011583     PERFORM 0040-PROCESSA-AGENCIAS UNTIL IO-STATUS = 'S'.        01158320
+011584     PERFORM 0050-PROCESSA-LIDOS.                                 01158420
+011585                                                                  01158520
+011586 0030-CRIA-HEADER.                                                01158620
+011587     MOVE SPACES TO FD-HEADER                                     01158720
+011588     INSPECT FD-HEADER  REPLACING ALL " " BY "="                  01158820
+011589     MOVE ' RELATORIO DE AGENCIAS - TATOBANK '                    01158921
+011590                                      TO FD-HEADER(10:34)         01159020
+011591     WRITE FD-HEADER                                              01159120
+011592     MOVE SPACES TO FD-HEADER                                     01159220
+011593     WRITE FD-HEADER                                              01159320
+011594     MOVE "DATA: "                    TO FD-HEADER                01159420
+011595     ACCEPT WS-DATA-IN                FROM DATE YYYYMMDD          01159520
+011596     MOVE WS-DIA-IN                   TO WS-DIA-RELAT             01159620
+011597     MOVE WS-MES-IN                   TO WS-MES-RELAT             01159720
+011598     MOVE WS-ANO-IN                   TO WS-ANO-RELAT             01159820
+011599     MOVE WS-DATA-RELAT               TO FD-HEADER(07:10)         01159920
+011600     MOVE "HORA: "                    TO FD-HEADER(20:06)         01160020
+011601     ACCEPT WS-HORARIO-IN             FROM TIME                   01160120
+011602     ADD    2                         TO WS-HORA-IN               01160220
+011603     MOVE   WS-HORA-IN                TO WS-HORA-RELAT            01160320
+011604     MOVE   WS-MINUTO-IN              TO WS-MINUTO-RELAT          01160420
+011605     MOVE   WS-SEGUNDO-IN             TO WS-SEGUNDO-RELAT         01160520
+011606     MOVE   WS-HORARIO-RELAT          TO FD-HEADER(26:08)         01160620
+011607     WRITE FD-HEADER                                              01160720
+011608     MOVE SPACES TO FD-HEADER                                     01160820
+011609     WRITE FD-HEADER                                              01160920
+011610                                                                  01161020
+011611     MOVE SPACES                    TO FD-HEADER                  01161120
+011612     MOVE "AGENCIA"                 TO FD-HEADER(01:07)           01161221
+011613     MOVE "CNPJ"                    TO FD-HEADER(10:04)           01161320
+011614     MOVE "NOME AGENCIA"            TO FD-HEADER(31:12)           01161421
+011615     MOVE "SEGMENTO"                TO FD-HEADER(59:08)           01161520
+011616     MOVE "STATUS"                  TO FD-HEADER(71:13)           01161620
+011617     MOVE "DT. ABERTURA"            TO FD-HEADER(83:11)           01161720
+011618     MOVE "DT. ENCERRAMENTO"        TO FD-HEADER(99:16)           01161820
+011619     MOVE "EMAIL"                   TO FD-HEADER(119:30)          01161920
+011620     MOVE "TELEFONE"                TO FD-HEADER(162:08)          01162020
+011621     MOVE "TEL.CELULAR"             TO FD-HEADER(178:11)          01162120
+011622     WRITE FD-HEADER                                              01162220
+011623     MOVE SPACES TO FD-HEADER                                     01162320
+011624     INSPECT FD-HEADER  REPLACING ALL " " BY "="                  01162420
+011625     WRITE FD-HEADER.                                             01162520
+011626                                                                  01162620
+011627 0040-PROCESSA-AGENCIAS.                                          01162720
+011628* LEITURA DO ARQUIVO DE ENTRADA E GRAVACAO NOS ARQUIVOS DE SAIDA  01162820
+011629     READ ENTRADA                                                 01162920
+011630      AT END                                                      01163020
+011631         MOVE 'S' TO IO-STATUS                                    01163120
+011632         EXIT PARAGRAPH                                           01163220
+011633      NOT AT END                                                  01163320
+011634                                                                  01163420
+011635     INITIALIZE WS-BODY-REGISTRO                                  01163520
+011634                                                                  01163420
+011636     MOVE COPYAG01-KEY-AG-BASE-FD-E      TO WS-AGENCIA-BASE       01163620
+011637     MOVE COPYAG01-KEY-AG-DV-FD-E        TO WS-AGENCIA-DV         01163720
+011634                                                                  01163420
+011638     MOVE COPYAG01-CNPJ-RE-FISCAL-FD-E   TO WS-CNPJ-RE-FISCAL     01163820
+011639     MOVE COPYAG01-CNPJ-ORDEM-FD-E       TO WS-CNPJ-ORDEM         01163920
+011640     MOVE COPYAG01-CNPJ-CONTROLE-FD-E    TO WS-CNPJ-CONTROLE      01164020
+011641     MOVE COPYAG01-CNPJ-FILIAL-FD-E      TO WS-CNPJ-FILIAL        01164120
+011642     MOVE COPYAG01-CNPJ-DV-FD-E          TO WS-CNPJ-DV            01164220
+011634                                                                  01163420
+011643     MOVE COPYAG01-NOME-AG-FD-E          TO WS-NOME-AGENCIA       01164320
+011644     MOVE COPYAG01-ANO-ABERTURA-FD-E     TO WS-ANO-OUT-AB         01164420
+011645     MOVE COPYAG01-MES-ABERTURA-FD-E     TO WS-MES-OUT-AB         01164520
+011646     MOVE COPYAG01-DIA-ABERTURA-FD-E     TO WS-DIA-OUT-AB         01164620
+011634                                                                  01163420
+011647     MOVE COPYAG01-EMAIL-AG-FD-E         TO WS-EMAIL              01164720
+011648     MOVE COPYAG01-TELEFONE-PREFIXO-FD-E TO WS-TELEFONE-PREFIXO   01164820
+011649     MOVE COPYAG01-TELEFONE-SUFIXO1-FD-E TO WS-TELEFONE-SUFIXO1   01164920
+011650     MOVE COPYAG01-TELEFONE-SUFIXO2-FD-E TO WS-TELEFONE-SUFIXO2   01165020
+011651     MOVE COPYAG01-CELULAR-PREFIXO-FD-E  TO WS-CELULAR-PREFIXO    01165120
+011652     MOVE COPYAG01-CELULAR-SUFIXO1-FD-E  TO WS-CELULAR-SUFIXO1    01165220
+011653     MOVE COPYAG01-CELULAR-SUFIXO2-FD-E  TO WS-CELULAR-SUFIXO2    01165320
+011654                                                                  01165420
+011655     IF COPYAG01-AG-VAREJO-FD-E                                   01165520
+011656           SET WS-AG-VAREJO              TO TRUE                  01165620
+011657     END-IF                                                       01165720
+011658                                                                  01165820
+011659     IF COPYAG01-AG-DIGITAL-FD-E                                  01165920
+011660           SET WS-AG-DIGITAL             TO TRUE                  01166020
+011661     END-IF                                                       01166120
+011662                                                                  01166220
+011663     IF COPYAG01-AG-CORPORATE-FD-E                                01166320
+011664           SET WS-AG-CORPORATE           TO TRUE                  01166420
+011665     END-IF                                                       01166520
+011666                                                                  01166620
+011667     EVALUATE TRUE                                                01166720
+011668      WHEN COPYAG01-AG-ATIVA-FD-E                                 01166820
+011669          MOVE "ATIVA"                   TO WS-STATUS-AGENCIA     01166920
+011670          MOVE WS-BODY-REGISTRO          TO FD-AGATIV             01167020
+011671          WRITE FD-AGATIV                                         01167120
+011672          ADD 1 TO WS-INDICE-ATIVAS                               01167220
+011673                                                                  01167320
+011674      WHEN COPYAG01-AG-BLOQUEADA-FD-E                             01167420
+011675          MOVE "BLOQUEADA"               TO WS-STATUS-AGENCIA     01167520
+011676          MOVE WS-BODY-REGISTRO          TO FD-AGBLOC             01167620
+011677          WRITE FD-AGBLOC                                         01167720
+011678          ADD 1 TO WS-INDICE-BLOQUEADAS                           01167820
+011679                                                                  01167920
+011680      WHEN COPYAG01-AG-INATIVA-FD-E                               01168020
+011681          MOVE "INATIVA"                 TO WS-STATUS-AGENCIA     01168120
+011682          MOVE COPYAG01-ANO-ENCERRA-FD-E TO WS-ANO-OUT-ENC        01168220
+011683          MOVE COPYAG01-MES-ENCERRA-FD-E TO WS-MES-OUT-ENC        01168320
+011684          MOVE COPYAG01-DIA-ENCERRA-FD-E TO WS-DIA-OUT-ENC        01168420
+011685          MOVE WS-BODY-REGISTRO          TO FD-AGINAT             01168520
+011686          WRITE FD-AGINAT                                         01168620
+011687          ADD 1 TO WS-INDICE-INATIVAS                             01168720
+011688     END-EVALUATE                                                 01168820
+011689     END-READ.                                                    01168920
+011690                                                                  01169020
+011691 0050-PROCESSA-LIDOS.                                             01169120
+011692     MOVE SPACES TO FD-FOOTERT                                    01169220
+011693     INSPECT FD-FOOTERT REPLACING ALL " " BY "="                  01169320
+011694     WRITE FD-FOOTERT                                             01169420
+011695                                                                  01169520
+011696     MOVE SPACES TO FD-FOOTERT                                    01169620
+011697     MOVE "TOTAL DE AGENCIAS ATIVAS: "     TO FD-FOOTERT(01:30)   01169721
+011698     MOVE WS-INDICE-ATIVAS TO FD-FOOTERT(31:05)                   01169820
+011699     WRITE FD-FOOTERT                                             01169920
+011700                                                                  01170020
+011701     MOVE SPACES TO FD-FOOTERT                                    01170120
+011702     MOVE "TOTAL DE AGENCIAS BLOQUEADAS: " TO FD-FOOTERT(01:30)   01170221
+011703     MOVE WS-INDICE-BLOQUEADAS TO FD-FOOTERT(31:05)               01170320
+011704     WRITE FD-FOOTERT                                             01170420
+011705                                                                  01170520
+011706     MOVE SPACES TO FD-FOOTERT                                    01170620
+011707     MOVE "TOTAL DE AGENCIAS INATIVAS: "   TO FD-FOOTERT(01:30)   01170721
+011708     MOVE WS-INDICE-INATIVAS TO FD-FOOTERT(31:05)                 01170820
+011709     WRITE FD-FOOTERT.                                            01170920
+011710                                                                  01171020

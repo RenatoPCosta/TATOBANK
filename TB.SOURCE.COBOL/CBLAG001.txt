@@ -1,0 +1,179 @@
+000100* N TATOBANK                                                      00010002
+000200*----------------------------------------------------------------*00020002
+000300*  CADASTRO AGENCIA: INCLUSAO DE NOVAS AGENCIAS                  *00030002
+000400*----------------------------------------------------------------*00040002
+000500*    CRIADOO POR: RENATO COSTA                                   *00050002
+000600*    DATA       : 15/07/2026                                     *00060002
+000700*    TAG        : TATOBANK                                       *00070002
+000800*    OBJETIVO   : INCLUIR O CADASTRO DE NOVAS AGENCIAS           *00080002
+000900*                 DE PDS PARA VSAM KSDS                          *00090002
+001000*----------------------------------------------------------------*00100002
+001100 IDENTIFICATION DIVISION.                                         00110002
+001200 PROGRAM-ID CBLAG001.                                             00120002
+001300 ENVIRONMENT DIVISION.                                            00130002
+001400 CONFIGURATION SECTION.                                           00140002
+001500 SPECIAL-NAMES.                                                   00150002
+001600      DECIMAL-POINT IS COMMA.                                     00160002
+001700 INPUT-OUTPUT SECTION.                                            00170002
+001800 FILE-CONTROL.                                                    00180002
+001900      SELECT ENTRADA ASSIGN TO ENTRADA                            00190002
+002000             ORGANIZATION IS SEQUENTIAL                           00200002
+002100             ACCESS MODE IS SEQUENTIAL                            00210002
+002200             FILE STATUS IS ST-ENTRADA.                           00220002
+002300                                                                  00230002
+002400      SELECT CONTROLE    ASSIGN TO CONTROLE                       00240002
+002500             ORGANIZATION IS SEQUENTIAL                           00250002
+002600             ACCESS MODE IS SEQUENTIAL                            00260002
+002700             FILE STATUS IS ST-CONTROLE-AG.                       00270002
+002800                                                                  00280002
+002900      SELECT SAIDA ASSIGN TO SAIDA                                00290002
+003000             ORGANIZATION IS INDEXED                              00300002
+003100             ACCESS MODE IS DYNAMIC                               00310002
+003200             RECORD KEY IS COPYAG01-KEY-STRUCT-FD-S               00320002
+003300             FILE STATUS IS ST-SAIDA.                             00330002
+003400                                                                  00340002
+003500 DATA DIVISION.                                                   00350002
+003600 FILE SECTION.                                                    00360002
+003700 FD ENTRADA                                                       00370002
+003800     RECORDING MODE IS F                                          00380002
+003900     BLOCK CONTAINS 0 RECORDS                                     00390002
+004000     LABEL RECORDS ARE STANDARD.                                  00400002
+004200   COPY COPYAG01 REPLACING ==(TAG)== BY ==FD-E==.                 00410002
+004300                                                                  00420002
+004400 FD CONTROLE                                                      00430002
+004500     RECORDING MODE IS F                                          00440002
+004600     BLOCK CONTAINS 0 RECORDS                                     00450002
+004700     LABEL RECORDS ARE STANDARD.                                  00460002
+004900 01 FD-CONTROLE-AG.                                               00470002
+005000   05 FD-CONTROLE-CONT  PIC 9(4).                                 00480002
+005100                                                                  00490002
+005200 FD SAIDA.                                                        00500002
+005500   COPY COPYAG01 REPLACING ==(TAG)== BY ==FD-S==.                 00510002
+005600                                                                  00520002
+005700 WORKING-STORAGE SECTION.                                         00530002
+005800 77 IO-STATUS                  PIC X(001) VALUE 'N'.              00540002
+005900 77 ST-ENTRADA                 PIC X(002) VALUE '00'.             00550002
+006000 77 ST-CONTROLE-AG             PIC X(002) VALUE '00'.             00560002
+006100 77 ST-SAIDA                   PIC X(002) VALUE '00'.             00570002
+000000                                                                  00610002
+006210 01 WS-CONTROL-ADD             PIC X(001) VALUE 'N'.              00590002
+006220   88 WS-ADD-TRUE              VALUE 'S'.                         00600002
+006230   88 WS-ADD-FALSE             VALUE 'N'.                         00610002
+006210 01 WS-CONTROL-READ             PIC X(001) VALUE 'N'.             00590002
+006220   88 WS-READ -TRUE            VALUE 'S'.                         00600002
+006230   88 WS-READ -FALSE           VALUE 'N'.                         00610002
+000000                                                                  00610002
+006200 01 WS-CONTROLADOR-AG.                                            00580002
+000000  05 WS-CONTROLADOR-AG-BRUTO  PIC 9(05)  VALUE ZEROES.            00580002
+000000 01 WS-CONTROLADOR-AG-NUM      REDEFINES  WS-CONTROLADOR-AG.      00580002
+000000  05 WS-WS-CONTROL-AG-NUM-FB   PIC 9(04).                         00580002
+000000  05 WS-WS-CONTROL-AG-NUM-F    REDEFINES WS-WS-CONTROL-AG-NUM-FB. 00580002
+000000   10 WS-CONTROL-AG-N1-NUM     PIC 9(01).                         00610002
+000000   10 WS-CONTROL-AG-N2-NUM     PIC 9(01).                         00610002
+000000   10 WS-CONTROL-AG-N3-NUM     PIC 9(01).                         00610002
+000000   10 WS-CONTROL-AG-N4-NUM     PIC 9(01).                         00610002
+000000  05 WS-CONTROL-AG-DV-NUM      PIC 9(01).                         00610002
+000000                                                                  00610002
+000000 77 WS-CONTROL-DV-SOMA         PIC 9(03)  VALUE ZERO.             00610002
+000000 77 WS-QUOCIENTE-DV            PIC 9(03)  VALUE ZERO.             00610002
+000000 77 WS-CONTROL-DV-RESULT       PIC 9(01)  VALUE ZERO.             00610002
+000000                                                                  00610002
+006300 PROCEDURE DIVISION.                                              00620002
+006400 0001-MAIN.                                                       00630002
+006500     PERFORM 0010-ABRIRARQ.                                       00640002
+008300                                                                  00790002
+000000     IF WS-READ-TRUE       THEN                                   00640002
+006600            PERFORM 0020-PROCESSA UNTIL IO-STATUS = 'S'.          00650002
+000000     END-IF.                                                      00650002
+008300                                                                  00790002
+006700     MOVE WS-WS-CONTROL-AG-NUM-FB    TO FD-CONTROLE-CONT.         00660002
+008300                                                                  00790002
+006710     IF WS-ADD-TRUE        THEN                                   00670002
+006800         REWRITE FD-CONTROLE-AG                                   00680002
+007300     END-IF.                                                      00690002
+008300                                                                  00790002
+007400     CLOSE  ENTRADA                                               00700002
+007500           CONTROLE                                               00710002
+007600              SAIDA.                                              00720002
+007700     GOBACK.                                                      00730002
+007800                                                                  00740002
+007900 0010-ABRIRARQ.                                                   00750002
+008000     OPEN INPUT ENTRADA.                                          00760002
+008100     OPEN I-O  CONTROLE                                           00770002
+008200                  SAIDA.                                          00780002
+008300                                                                  00790002
+008400     IF ST-ENTRADA NOT = '00'                                     00800002
+008500     DISPLAY 'ERRO OPEN ENTRADA - FS=' ST-ENTRADA                 00810002
+008600             MOVE 'S' TO IO-STATUS                                00820002
+008700     END-IF.                                                      00830002
+008800                                                                  00840002
+008900     IF ST-CONTROLE-AG NOT = '00'                                 00850002
+009000         DISPLAY 'ERRO OPEN CONTADOR - FS= ' ST-CONTROLE-AG       00860002
+009100             MOVE 'S' TO IO-STATUS                                00870002
+009200     END-IF.                                                      00880002
+009300                                                                  00890002
+009400     IF ST-SAIDA = '35'                                           00900002
+009401             OPEN OUTPUT SAIDA                                    00910002
+009402     END-IF.                                                      00920002
+009403                                                                  00930002
+009405     IF ST-SAIDA NOT = '00'                                       00940002
+009500             DISPLAY 'ERRO OPEN SAIDA VSAM - FS=' ST-SAIDA        00950002
+009600             MOVE 'S' TO IO-STATUS                                00960002
+009700     END-IF.                                                      00970002
+009800                                                                  00980002
+009900     READ CONTROLE                                                00990002
+010000         AT END                                                   01000002
+009800              CONTINUE                                            00980002
+000000*             INSERIR MENSAGEM DE ERRO EM ARQUIVO
+010200         NOT AT END                                               01020002
+010300             MOVE FD-CONTROLE-CONT TO WS-WS-CONTROL-AG-NUM-FB     01030002
+012610                SET WS-READ -TRUE TO TRUE                         01300002
+010400     END-READ.                                                    01040002
+010500                                                                  01050002
+010600 0020-PROCESSA.                                                   01060002
+010800     READ ENTRADA                                                 01080002
+010900      AT END                                                      01090002
+011000         MOVE 'S' TO IO-STATUS                                    01100002
+011100         EXIT PARAGRAPH                                           01110002
+011200      NOT AT END                                                  01120002
+010500                                                                  01050002
+010500         INITIALIZE COPYAG01-I-O-AGENCIA-FD-S                     01050002
+011400         MOVE COPYAG01-I-O-AGENCIA-FD-E                           01130002
+011401                                   TO COPYAG01-I-O-AGENCIA-FD-S   01140002
+001420         PERFORM 0030-CALCULO-DV                                  01050002
+010500         MOVE WS-CONTROLADOR-AG-BRUTO                             01050002
+010500                                   TO COPYAG01-KEY-AG-BASE-FD-S   01050002
+000000         MOVE WS-CONTROL-DV-RESULT TO COPYAG01-KEY-AG-DV-FD-S     01170002
+010500                                                                  01050002
+001420         ACCEPT COPYAG01-DATA-INCLUSAO-FD-S  FROM DATE YYYYMMDD   01160002
+001420         ACCEPT COPYAG01-DATA-ALTERACAO-FD-S FROM DATE YYYYMMDD   01170002
+011500                                                                  01180002
+011600         WRITE COPYAG01-I-O-AGENCIA-FD-S                          01190002
+011700             INVALID KEY                                          01200002
+011800                IF ST-SAIDA = '22'                                01210002
+011900                    DISPLAY 'AGENCIA DUPLICADA: '                 01220002
+012000                          COPYAG01-KEY-STRUCT-FD-S                01230002
+012100                ELSE                                              01240002
+012200                    DISPLAY 'ERRO WRITE VSAM - FS='               01250002
+012300                          ST-SAIDA                                01260002
+012400                END-IF                                            01270002
+012500             NOT INVALID KEY                                      01280002
+012600                ADD 1 TO WS-WS-CONTROL-AG-NUM-FB                  01290002
+012610                SET WS-ADD-TRUE TO TRUE                           01300002
+012700         END-WRITE                                                01310002
+012800                                                                  01320002
+012900     END-READ.                                                    01330002
+012800                                                                  01320002
+000000 0030-CALCULO-DV.                                                 01330002
+000000* CRIACAO DE DV COM (RESTO DE 11)                                 01320002
+000000                                                                  01320002
+000000     COMPUTE WS-CONTROL-DV-SOMA =                                 01320002
+000000                         (WS-CONTROL-AG-N1-NUM * 5) +             01320002
+000000                         (WS-CONTROL-AG-N2-NUM * 4) +             01320002
+000000                         (WS-CONTROL-AG-N3-NUM * 3) +             01320002
+000000                         (WS-CONTROL-AG-N4-NUM * 2)               01320002
+000000                                                                  01320002
+012800     DIVIDE WS-CONTROL-DV-SOMA    BY 11                           01320002
+000000            GIVING WS-QUOCIENTE-DV                                01320002
+000000            REMAINDER WS-CONTROL-DV-RESULT                        01320002
+000000     COMPUTE WS-CONTROL-DV-RESULT = 11 - WS-CONTROL-DV-RESULT.    01320002

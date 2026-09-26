@@ -1,0 +1,75 @@
+      * N TATOBANK
+      *---------------------------------------------------------------*
+      *  FUNCAO : BASE DE VARS I-O DE AGENCIAS                        *
+      *                                                               *
+      *  COMUNICA COM: CBLAG001.                                      *
+      *---------------------------------------------------------------*
+       01 COPYAG01-I-O-AGENCIA-(TAG).
+        03 COPYAG01-I-O-AG-BRUTO-(TAG)     PIC X(350).
+
+        03 COPYAG01-AG-(TAG) REDEFINES COPYAG01-I-O-AG-BRUTO-(TAG).
+         05 COPYAG01-KEY-STRUCT-(TAG).
+          10 COPYAG01-KEY-AG-(TAG).
+           15 COPYAG01-KEY-AG-BASE-(TAG).
+            20 COPYAG01-KEY-AG-N1-(TAG)         PIC 9(01).
+            20 COPYAG01-KEY-AG-N2-(TAG)         PIC 9(01).
+            20 COPYAG01-KEY-AG-N3-(TAG)         PIC 9(01).
+            20 COPYAG01-KEY-AG-N4-(TAG)         PIC 9(01).
+           15 COPYAG01-KEY-AG-DV-(TAG)          PIC 9(01).
+          10 FILLER                             PIC 9(02) VALUE ZEROES.
+         05 COPYAG01-AG-DETALHES-(TAG).
+          10 COPYAG01-CNPJ-(TAG).
+           15 COPYAG01-CNPJ-RAIZ-(TAG).
+            20 COPYAG01-CNPJ-RE-FISCAL-(TAG)    PIC X(02).
+            20 COPYAG01-CNPJ-ORDEM-(TAG)        PIC X(03).
+            20 COPYAG01-CNPJ-CONTROLE-(TAG)     PIC X(03).
+           15 COPYAG01-CNPJ-FILIAL-(TAG)        PIC X(04).
+           15 COPYAG01-CNPJ-DV-(TAG)            PIC 9(02).
+          10 COPYAG01-NOME-AG-(TAG)             PIC X(25).
+          10 COPYAG01-TIPO-AG-(TAG)             PIC X(02).
+           88 COPYAG01-AG-VAREJO-(TAG)          VALUE '0V'.
+           88 COPYAG01-AG-DIGITAL-(TAG)         VALUE '0D'.
+           88 COPYAG01-AG-CORPORATE-(TAG)       VALUE '0C'.
+          10 COPYAG01-STATUS-AG-(TAG)           PIC X(01).
+           88 COPYAG01-AG-ATIVA-(TAG)           VALUE 'A'.
+           88 COPYAG01-AG-INATIVA-(TAG)         VALUE 'I'.
+           88 COPYAG01-AG-BLOQUEADA-(TAG)       VALUE 'B'.
+          10 COPYAG01-TELEFONE-AG-(TAG).
+           15 COPYAG01-TELEFONE-PREFIXO-(TAG)   PIC X(02).
+           15 COPYAG01-TELEFONE-SUFIXO-(TAG).
+             20 COPYAG01-TELEFONE-SUFIXO1-(TAG) PIC X(04).
+             20 COPYAG01-TELEFONE-SUFIXO2-(TAG) PIC X(04).
+          10 COPYAG01-CELULAR-AG-(TAG).
+           15 COPYAG01-CELULAR-PREFIXO-(TAG)    PIC X(02).
+           15 COPYAG01-CELULAR-SUFIXO-(TAG).
+             20 COPYAG01-CELULAR-SUFIXO1-(TAG)  PIC X(05).
+             20 COPYAG01-CELULAR-SUFIXO2-(TAG)  PIC X(04).
+          10 COPYAG01-EMAIL-AG-(TAG)            PIC X(40).
+         05 COPYAG01-MANUTENCAO-(TAG).
+          10 COPYAG01-DATA-ABERTURA-(TAG).
+             15 COPYAG01-ANO-ABERTURA-(TAG)     PIC 9(04).
+             15 COPYAG01-MES-ABERTURA-(TAG)     PIC 9(02).
+             15 COPYAG01-DIA-ABERTURA-(TAG)     PIC 9(02).
+          10 COPYAG01-DATA-ENCERRA-(TAG).
+             15 COPYAG01-ANO-ENCERRA-(TAG)      PIC 9(04).
+             15 COPYAG01-MES-ENCERRA-(TAG)      PIC 9(02).
+             15 COPYAG01-DIA-ENCERRA-(TAG)      PIC 9(02).
+          10 COPYAG01-USER-INCLUSAO-(TAG)       PIC X(08).
+          10 COPYAG01-DATA-INCLUSAO-(TAG).
+             15 COPYAG01-ANO-INCLUSAO-(TAG)     PIC 9(04).
+             15 COPYAG01-MES-INCLUSAO-(TAG)     PIC 9(02).
+             15 COPYAG01-DIA-INCLUSAO-(TAG)     PIC 9(02).
+          10 COPYAG01-USER-ALTERACAO-(TAG)      PIC X(08).
+          10 COPYAG01-DATA-ALTERACAO-(TAG).
+             15 COPYAG01-ANO-ALTERACAO-(TAG)    PIC 9(04).
+             15 COPYAG01-MES-ALTERACAO-(TAG)    PIC 9(02).
+             15 COPYAG01-DIA-ALTERACAO-(TAG)    PIC 9(02).
+         05 COPYAG01-ENDERECO-AG-(TAG).
+          10 COPYAG01-UF-(TAG)                  PIC X(02).
+          10 COPYAG01-CIDADE-(TAG)              PIC X(30).
+          10 COPYAG01-LOGADOURO-(TAG)           PIC X(30).
+          10 COPYAG01-NUMERO-(TAG)              PIC X(05).
+          10 COPYAG01-COMPLEMENTO-(TAG)         PIC X(05).
+          10 COPYAG01-CEP-(TAG)                 PIC X(08).
+          10 COPYAG01-TIPO-IMOVEL-(TAG)         PIC X(15).
+         05 FILLER                              PIC X(97) VALUE ZEROES.

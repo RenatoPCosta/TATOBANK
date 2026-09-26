@@ -1,0 +1,63 @@
+//*---------------------------------------------------------------*
+//* CRIACAO DE ARQUIVOS TEMPORARIOS PARA USO DO PROGRAMA CBLAGR01
+//*---------------------------------------------------------------*
+//STEP1    EXEC PGM=IEFBR14,COND=(0,NE)
+//HEADERT  DD  DSN=&&HEADERT,
+//             DISP=(NEW,PASS,DELETE),
+//             UNIT=SYSDA,
+//             SPACE=(TRK,(5,5)),
+//             DCB=(RECFM=FB,LRECL=200,BLKSIZE=28000)
+//AGATIV   DD  DSN=&&AGATIV,
+//             DISP=(NEW,PASS,DELETE),
+//             UNIT=SYSDA,
+//             SPACE=(TRK,(5,5)),
+//             DCB=(RECFM=FB,LRECL=200,BLKSIZE=28000)
+//AGBLOC   DD  DSN=&&AGBLOC,
+//             DISP=(NEW,PASS,DELETE),
+//             UNIT=SYSDA,
+//             SPACE=(TRK,(5,5)),
+//             DCB=(RECFM=FB,LRECL=200,BLKSIZE=28000)
+//AGINAT   DD  DSN=&&AGINAT,
+//             DISP=(NEW,PASS,DELETE),
+//             UNIT=SYSDA,
+//             SPACE=(TRK,(5,5)),
+//             DCB=(RECFM=FB,LRECL=200,BLKSIZE=28000)
+//FOOTERT  DD  DSN=&&FOOTERT,
+//             DISP=(NEW,PASS,DELETE),
+//             UNIT=SYSDA,
+//             SPACE=(TRK,(5,5)),
+//             DCB=(RECFM=FB,LRECL=200,BLKSIZE=28000)
+//*---------------------------------------------------------------*
+//* EXECUCAO DO PROGRAMA CBLAGR01 PARA GERAR O RELATORIO
+//*---------------------------------------------------------------*
+//STEP2     EXEC PGM=CBLAGR01,COND=(0,NE)
+//STEPLIB   DD DISP=SHR,DSN=Z78723.TB.LOAD
+//SYSOUT    DD SYSOUT=*
+//CEEDUMP   DD DUMMY
+//SYSUDUMP  DD DUMMY
+//ENTRADA   DD DSN=Z78723.TB.AG.KSDS,DISP=OLD
+//HEADERT   DD DSN=&&HEADERT,DISP=(OLD,PASS)
+//AGATIV    DD DSN=&&AGATIV,DISP=(OLD,PASS)
+//AGBLOC    DD DSN=&&AGBLOC,DISP=(OLD,PASS)
+//AGINAT    DD DSN=&&AGINAT,DISP=(OLD,PASS)
+//FOOTERT   DD DSN=&&FOOTERT,DISP=(OLD,PASS)
+//SYSTSPRT   DD SYSOUT=*
+//*---------------------------------------------------------------*
+//* CONCAT DOS ARQUIVOS TEMPORARIOS PARA RELATORIO FINAL
+//*---------------------------------------------------------------*
+//STEP3    EXEC PGM=SORT,COND=(0,NE)
+//SYSPRINT DD SYSOUT=*
+//SYSOUT   DD SYSOUT=*
+//SORTIN   DD DSN=&&HEADERT,DISP=(OLD,PASS)
+//         DD DSN=&&AGATIV,DISP=(OLD,PASS)
+//         DD DSN=&&AGBLOC,DISP=(OLD,PASS)
+//         DD DSN=&&AGINAT,DISP=(OLD,PASS)
+//         DD DSN=&&FOOTERT,DISP=(OLD,PASS)
+//SORTOUT DD DSN=Z78723.TB.AG.GDG.REL01(+1),
+//        DISP=(NEW,CATLG,DELETE),
+//        UNIT=SYSDA,
+//        SPACE=(TRK,(1,1)),
+//        DCB=(RECFM=FB,LRECL=200,BLKSIZE=28000)
+//SYSIN   DD *
+ SORT FIELDS=COPY
+/*

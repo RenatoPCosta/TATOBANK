@@ -1,0 +1,6 @@
+//JOBRAG1  JOB (ACCT),'RELATORIO DIARIO',MSGLEVEL=(2,0),NOTIFY=&SYSUID
+//         JCLLIB   ORDER=(Z78723.TB.SOURCE.PROCLIB)
+//*---------------------------------------------------------------*
+//* CHAMADA RELATORIO STATUS AGENCIA
+//*---------------------------------------------------------------*
+//STEPREL  EXEC RPROCAG1
